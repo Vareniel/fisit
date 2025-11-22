@@ -204,6 +204,11 @@
         const MAX_DISPLAY = 6; // Maximum fish cards to display
         const grid = document.getElementById('fishGrid');
         const absmini = document.getElementsByClassName('abs-mini')[0];
+        const search = document.getElementsByClassName('search-bar')[0];
+
+        search.addEventListener('change', (e) => {
+            window.urlSocket = e.target.value;
+        })
 
         grid.addEventListener('wheel', (e) => {
             e.preventDefault(); // cegah scroll vertikal
@@ -617,5 +622,6 @@ function updateLastCatch() {
         };
     </script>
 </body>
+
 
 </html>
