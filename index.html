@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIKITIN - Gaming Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css"
+        rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="ws-status disconnected" id="wsStatus">🔴 Disconnected</div>
+
+    <div class="dashboard-bg">
+        <div class="dashboard-container">
+            <!-- Left Sidebar -->
+            <div class="sidebar-left">
+                <div class="logo" title="Add Game"><img src="./img/logo.svg" alt="" srcset=""></div>
+                <div class="sidebar-nav">
+                    <div class="nav-icon active" title="Home"><i class="bi bi-house"></i></div>
+                    <div class="nav-icon" title="Games"><i class="bi bi-controller"></i></div>
+                    <div class="nav-icon" title="Library"><i class="bi bi-gift-fill"></i></div>
+                    <div class="nav-icon" title="Friends"><i class="bi bi-tv-fill"></i></div>
+                    <div class="nav-icon" title="Store"><i class="bi bi-pie-chart-fill"></i></div>
+                    <div class="nav-icon" title="Messages"><i class="bi bi-bag-fill"></i></div>
+                    <div class="nav-icon" title="Settings"><i class="bi bi-cast"></i></div>
+                </div>
+                <div class="add-btn" title="Add Game"><span class="bg"></span><span class="plus">+</span></div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Header -->
+                <div class="header-top">
+                    <div class="greeting">
+                        Good evening,<strong class="strang">LAVIRUZ</strong>
+                    </div>
+                    <div class="sb">
+                        <input type="text" class="search-bar" placeholder="Search">
+                    </div>
+                    <div class="header-icons">
+                        <button class="icon-btn"><i class="bi bi-bag"></i></button>
+                        <button class="icon-btn notification"><i class="bi bi-bell"></i></button>
+                    </div>
+                </div>
+
+                <!-- Featured Game -->
+                <div class="featured-section">
+                    <div class="featured-card">
+                        <div>
+                            <div class="game-tags">
+                                <span class="tag active"><i class="bi bi-fire"></i>Popular</span>
+                                <!-- <span class="tag"><img src="./img/steam.svg" alt="" srcset=""></span> -->
+                                <span class="tag"><img src="./img/roblox.png" alt="" srcset=""></span>
+                            </div>
+                            <h2>Fish It</h2>
+                            <p>Fish It is a popular Roblox fishing game where players fish for a wide variety of fish,
+                                sell their catches, and use the earnings to upgrade their equipment.</p>
+                            <div class="review-info">
+                                <div class="avatar-group">
+                                    <img src="./img/person_1.png" alt="User">
+                                    <img src="./img/person_0.png" alt="User">
+                                </div>
+                                <button class="review-btn"><i class="bi bi-hand-thumbs-up-fill"></i>+<span
+                                        class="review-count">0</span> Reviews</button>
+                            </div>
+                        </div>
+                        <div>
+                            <img class="gekko" src="./img/fishit.png" alt="" srcset="">
+                        </div>
+                    </div>
+                    <div class="featured-image">
+                        <div class="featured-image-container d-flex">
+                            <img src="./img/coin_master.png" alt="" srcset="">
+                            <p>Unravel 2<span>(Standard Edition + Starter Pass)</span></p>
+                            <i class="bi bi-chevron-right"></i>
+                        </div>
+                        <div class="featured-image-container d-flex">
+                            <img src="./img/subway.png" alt="" srcset="">
+                            <p>Subway Surf<span></span></p>
+                            <i class="bi bi-chevron-right"></i>
+                        </div>
+                        <div class="featured-image-container d-flex">
+                            <img src="./img/rdr.png" alt="" srcset="">
+                            <p>Red Dead Redemption 3<span> (Premium Pack)</span></p>
+                            <i class="bi bi-chevron-right"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- New Catches Section -->
+                <div>
+                    <div class="featured-section-2">
+                        <div class="section-left">
+                            <div class="section-header">
+                                <h3>Unique Fishes <span id="catchCount"
+                                        style="color: #ac515d; font-size: 14px;">(0)</span></h3>
+                                <span class="see-more">See More</span>
+                            </div>
+                            <div class="abs-mini">
+                                <div class="games-grid" id="fishGrid">
+                                    <div>
+                                        <div class="buletan"></div>
+                                        <div class="game-mini-card rarity-${fish.rarity}">
+                                            <div class="top-icons">
+                                                <div class="icon-bubble play-icon">▶</div>
+                                                <div class="icon-bubble bag-icon">❤</div>
+                                            </div>
+
+                                            <div class="card-bg">
+                                                <img src="./img/gekko.png" alt="${fish.fishName}">
+                                                <div class="gradient-overlay"></div>
+                                            </div>
+
+                                            <div class="card-info">
+                                                <h4>Gekko</h4>
+                                                <span class="sub">Valo • rant</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="section-header">
+                                <h3>Last Catch Fishes</h3>
+                                <span class="see-more">See More</span>
+                            </div>
+                            <div class="lastCatch">
+                                <img class="last-catch-image" src="./img/roblox.png" alt="" srcset="">
+                                <div class="fish-wrapper d-flex">
+                                    <p class="last-catch-name">Roblox</p>
+                                    <span class="last-catch-rarity">membuat anda goblox</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="section-right">
+                            <div class="section-header">
+                                <h3>Your Statistic</h3>
+                                <span class="see-more">→</span>
+                            </div>
+                            <div class="statistic">
+                                <div class="circleWrapper">
+                                    <div class="circle1">
+                                        <div class="fishCountWrapper">
+                                            <p>Total fishes</p>
+                                            <h6 class="fishCount">0</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="circleGrid">
+                                    <div class="divCircle">
+                                        <img src="./img/roblox.png" alt="" srcset="">
+                                        <p>2,340h</p>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="right">
+                <div class="sidebar-right-up">
+                    <div class="user-profile"><img src="./img/person_0.png" alt="User"></div>
+                    <div class="user-chat"><i class="bi bi-people-fill" style="color: white;"></i></div>
+                    <div class="user-avatar"><img src="./img/person_1.png" alt="User"></div>
+                    <div class="user-avatar"><img src="./img/person_0.png" alt="User"></div>
+                    <div class="user-avatar"><img src="./img/person_1.png" alt="User"></div>
+                    <div class="user-avatar"><img src="./img/person_0.png" alt="User"></div>
+                    <div class="user-avatar"><img src="./img/person_1.png" alt="User"></div>
+                    <div class="user-avatar"><img src="./img/person_0.png" alt="User"></div>
+                </div>
+                <div class="sidebar-right-down">
+                    <div class="user-chat"><i class="bi bi-chat-dots-fill" style="color: white;"></i></div>
+                    <div class="user-avatar"><img src="./img/person_1.png" alt="User"></div>
+                    <div class="user-avatar"><img src="./img/person_0.png" alt="User"></div>
+                    <div class="user-avatar"><img src="./img/person_1.png" alt="User"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let ws;
+        let catchHistory = [];
+        let fishCaught = 0;
+        let uniqueFishes = {};
+        const rarityColors = {
+            common: '#4a4a4a',
+            uncommon: '#1e5a3a',
+            rare: '#1e3a8a',
+            epic: '#581c87',
+            legendary: '#b45309',
+            mythic: '#991b1b',
+            secret: '#37d4bf'
+        };
+        const MAX_DISPLAY = 6; // Maximum fish cards to display
+        const grid = document.getElementById('fishGrid');
+        const absmini = document.getElementsByClassName('abs-mini')[0];
+
+        grid.addEventListener('wheel', (e) => {
+            e.preventDefault(); // cegah scroll vertikal
+            
+            // Geser horizontal
+            grid.scrollLeft += e.deltaY / 5;
+            
+            // Hitung posisi scroll
+            const maxScroll = grid.scrollWidth - grid.clientWidth;
+            const scrollPos = grid.scrollLeft;
+            
+            let mask;
+
+            if (scrollPos <= 0) {
+                // Mentok kiri → fade kanan
+                mask = 'linear-gradient(to right, black 98%, transparent 100%)';
+            } else if (scrollPos >= maxScroll) {
+                // Mentok kanan → fade kiri
+                mask = 'linear-gradient(to left, black 98%, transparent 100%)';
+            } else {
+                // Tengah → fade kiri & kanan
+                mask = 'linear-gradient(to right, transparent 0%, black 2%, black 98%, transparent 100%)';
+            }
+
+            absmini.style.maskImage = mask;
+            absmini.style.webkitMaskImage = mask;
+        }, { passive: false });
+
+        // Load data from localStorage
+        function loadData() {
+            const savedHistory = localStorage.getItem('fishCatchHistory');
+            const savedCount = localStorage.getItem('fishCaught') || 0;
+            const savedUnique = localStorage.getItem('uniqueFishes');
+
+            if (savedHistory || savedCount) {
+                catchHistory = JSON.parse(savedHistory);
+                fishCaught = savedCount;
+                uniqueFishes = savedUnique ? JSON.parse(savedUnique) : {};
+                updateFishGrid(true);
+                updateLastCatch();
+            }
+        }
+
+        // Save data to localStorage
+        function saveData() {
+            localStorage.setItem('fishCatchHistory', JSON.stringify(catchHistory));
+            localStorage.setItem('fishCaught', JSON.stringify(fishCaught));
+            localStorage.setItem('uniqueFishes', JSON.stringify(uniqueFishes));
+        }
+
+        // Connect WebSocket
+        function connectWebSocket() {
+            const ws = new WebSocket(`wss://${window.urlSocket}`);
+
+            ws.onopen = () => {
+                const statusEl = document.getElementById('wsStatus');
+                statusEl.className = 'ws-status connected';
+                statusEl.innerHTML = '🟢 Connected';
+                console.log('WebSocket connected');
+            };
+
+            ws.onclose = () => {
+                const statusEl = document.getElementById('wsStatus');
+                statusEl.className = 'ws-status disconnected';
+                statusEl.innerHTML = '🔴 Disconnected';
+                console.log('WebSocket disconnected, reconnecting...');
+                setTimeout(connectWebSocket, 3000);
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    processFishCatch(data);
+                } catch (error) {
+                    console.error('Error processing message:', error);
+                }
+            };
+        }
+
+        // Process incoming fish catch
+        function processFishCatch(payload) {
+            const embed = payload?.embeds?.[0];
+            if (!embed) return;
+
+            // Parse data
+            const fishName = embed.fields?.[0]?.value?.replace(/```/g, "").trim() ?? "Unknown Fish";
+            const weightRaw = embed.fields?.[1]?.value?.replace(/```/g, "").trim();
+            const weight = weightRaw === "N/A" ? 0 : parseFloat(weightRaw);
+            const tier = embed.fields?.[2]?.value?.replace(/```/g, "").trim().toLowerCase() ?? "common";
+            const player = embed.description?.match(/\|\|(.*?)\|\|/)?.[1] ?? "Unknown";
+            const timestamp = embed?.timestamp ?? new Date().toISOString();
+            const img = embed?.image?.url;
+
+            // Update unique fishes
+            if (!uniqueFishes[fishName]) {
+                uniqueFishes[fishName] = {
+                    count: 0,
+                    img: img,
+                    rarity: tier
+                };
+            }
+            uniqueFishes[fishName].count++;
+
+            // Add to history
+            const newCatch = {
+                fishName,
+                weight,
+                rarity: tier,
+                player,
+                timestamp,
+                img
+            };
+
+            catchHistory.unshift(newCatch);
+
+            // Keep only latest catches
+            if (catchHistory.length > MAX_DISPLAY) {
+                catchHistory = catchHistory.slice(0, MAX_DISPLAY);
+            }
+
+            fishCaught++;
+
+            const fishCount = document.getElementsByClassName('fishCount')[0];
+            fishCount.textContent = fishCaught;
+            saveData();
+            updateFishGrid();
+            updateLastCatch();
+
+            // Show notification
+            // showNotification(fishName, tier);
+        }
+
+        // Update fish grid display
+        function updateFishGrid(isLoad = false) {
+            const gridEl = document.getElementsByClassName('games-grid')[0];
+            const countEl = document.getElementById('catchCount');
+
+            const uniqueCount = Object.keys(uniqueFishes).length;
+
+            if (uniqueCount === 0) {
+                gridEl.innerHTML = `
+                    <div class="buletan"></div>
+                    <div class="game-mini-card placeholder-card">
+                        <div class="card-bg placeholder-bg">
+                            <div class="placeholder-icon">🐟</div>
+                            <div class="gradient-overlay"></div>
+                        </div>
+
+                        <div class="card-info">
+                            <h4>No Catches Yet</h4>
+                            <span class="sub">Waiting for live fish data...</span>
+                        </div>
+                    </div>
+                `;
+                countEl.textContent = '(0)';
+                return;
+            }
+
+            countEl.textContent = `(${uniqueCount})`;
+            const fishCount = document.getElementsByClassName('fishCount')[0];
+            fishCount.textContent = fishCaught;
+            fishCount.classList.remove('pop');
+
+            // trigger reflow supaya animasi bisa dipakai lagi
+            void fishCount.offsetWidth;
+
+            // tambahkan class animasi
+            fishCount.classList.add('pop');
+
+            if (catchHistory.length > 0) {
+                const playerName = document.querySelectorAll("strong")[0];
+                if (playerName.textContent !== catchHistory[0]?.player) {
+                    playerName.textContent = `@${catchHistory[0].player}`
+                }
+            }
+
+            // Convert to array and sort by count
+            let fishArray = Object.entries(uniqueFishes).map(([name, data]) => ({
+                fishName: name,
+                ...data
+            })).sort((a, b) => b.count - a.count);
+            const rarityOrder = {
+                secret: 7,
+                mythic: 6,
+                legendary: 5,
+                epic: 4,
+                rare: 3,
+                uncommon: 2,
+                common: 1
+            };
+
+            fishArray = fishArray.sort((a, b) => {
+                return rarityOrder[b.rarity] - rarityOrder[a.rarity];
+            });
+
+            gridEl.style.gridTemplateColumns = `repeat(${fishArray.length}, 1fr)`;
+
+            gridEl.innerHTML = fishArray.map((fish, index) => `
+                <div>
+                    <div class="buletan"></div>
+                    <div class="game-mini-card rarity-${fish.rarity}">
+                        <div class="top-icons">
+                            <div class="icon-bubble play-icon">▶</div>
+                            <div class="icon-bubble bag-icon">❤</div>
+                        </div>
+    
+                        <div class="card-bg">
+                            <img src="${fish.img || "./img/coin_master.png"}" alt="${fish.fishName}">
+                            <div class="gradient-overlay"></div>
+                        </div>
+    
+                        <div class="card-info">
+                            <h4>${fish.fishName}</h4>
+                            <span class="sub">${fish.count}x caught</span>
+                        </div>
+                    </div>
+                </div>
+            `).join("");
+        }
+
+let lastFishName = null;
+let sameFishCounter = 0;
+let fishMemory = {}; // { "Gekko": 2, "Roblox": 1, ... }
+window.fishMemory = fishMemory;
+function updateLastCatch() {
+    if (catchHistory.length === 0) return;
+
+    const lastFish = catchHistory[0];
+    const name = document.querySelector('.last-catch-name');
+    const rarity = document.querySelector('.last-catch-rarity');
+    const img = document.querySelector('.last-catch-image');
+
+    // update memory
+    if (!fishMemory[lastFish.fishName]) fishMemory[lastFish.fishName] = 0;
+    fishMemory[lastFish.fishName]++;
+
+    // cek apakah sama dengan tangkapan sebelumnya
+    const isAgain = lastFishName === lastFish.fishName;
+    if (isAgain) {
+        sameFishCounter++;
+        for (let fish in fishMemory) {
+            if (fish !== lastFish.fishName) {
+                fishMemory[fish] = 0;
+            }
+        }
+    } else {
+        sameFishCounter = 1;
+    }
+
+    // cek apakah ini ikan lama yang muncul lagi setelah pindah ikan lain
+    const isReturningFish = !isAgain && fishMemory[lastFish.fishName] > 1;
+
+    lastFishName = lastFish.fishName;
+
+    // update nama ikan
+    name.textContent = lastFish.fishName;
+
+    // update rarity & gambar
+    rarity.textContent = lastFish.rarity;
+    img.src = lastFish.img || './img/roblox.png';
+    img.style.setProperty('--rarity-color', rarityColors[lastFish.rarity] || '#fff');
+
+    // animasi pop
+    img.classList.remove('pop-image');
+    void img.offsetWidth;
+    img.classList.add('pop-image');
+
+    // background gradient rarity
+    const colors = {
+        common: 'linear-gradient(135deg, #4a4a4a, #2d2d2d)',
+        uncommon: 'linear-gradient(135deg, #1e5a3a, #0f3d26)',
+        rare: 'linear-gradient(135deg, #1e3a8a, #0f1e4d)',
+        epic: 'linear-gradient(135deg, #581c87, #3b0764)',
+        legendary: 'linear-gradient(135deg, #b45309, #78350f)',
+        mythic: 'linear-gradient(135deg, #991b1b, #7f1d1d)',
+        secret: 'linear-gradient(135deg, #37d4bf, #00cea5)'
+    };
+    rarity.style.background = colors[lastFish.rarity] || colors.common;
+
+    // floating text
+    const container = document.querySelector('.lastCatch');
+    const floating = document.createElement('span');
+    floating.className = 'floating-again';
+
+    // teks
+    const againTexts = ["Again?", "Really?", "This again?", "Déjà vu!", "Here we go...", "Unbelievable!", "Same fish?!"];
+    const overSameTexts = ["Enough!", "OMG!", "Stop it!", "Too many!", "Can't believe it!", "Again?!", "Please... another fish :D"];
+    const returningTexts = ["I know where this is going...", "Back again?", "Déjà vu incoming...", "Here we go again..."];
+    const newTexts = ["Finally!!", "New catch!", "Fresh one!", "At last!", "Nice!"];
+
+    if (sameFishCounter > 5) {
+        floating.textContent = overSameTexts[Math.floor(Math.random() * overSameTexts.length)];
+        floating.style.color = "#ff0040"; // merah dramatis
+        floating.style.textShadow = "0 0 5px #fff, 0 0 10px #ff0040";
+    } else if (isReturningFish) {
+        floating.textContent = returningTexts[Math.floor(Math.random() * returningTexts.length)];
+        floating.style.color = "#ff8c00"; // oranye dramatis
+        floating.style.textShadow = "0 0 5px #fff, 0 0 10px #ff8c00";
+    } else if (isAgain) {
+        floating.textContent = againTexts[Math.floor(Math.random() * againTexts.length)];
+        floating.style.color = "#ffd700"; // kuning cerah
+        floating.style.textShadow = "0 0 5px #fff, 0 0 10px #ffd700";
+    } else {
+        floating.textContent = newTexts[Math.floor(Math.random() * newTexts.length)];
+        floating.style.color = "#04ff00"; // hijau segar
+        floating.style.textShadow = "0 0 5px #fff, 0 0 10px #04ff00";
+    }
+
+    container.appendChild(floating);
+    floating.addEventListener('animationend', () => floating.remove());
+}
+
+
+        // Get rarity color gradient
+        function getRarityColor(rarity) {
+            const colors = {
+                common: 'rgba(74, 74, 74, 0.6), rgba(45, 45, 45, 0.8)',
+                uncommon: 'rgba(30, 90, 58, 0.6), rgba(15, 61, 38, 0.8)',
+                rare: 'rgba(30, 58, 138, 0.6), rgba(15, 30, 77, 0.8)',
+                epic: 'rgba(88, 28, 135, 0.6), rgba(59, 7, 100, 0.8)',
+                legendary: 'rgba(180, 83, 9, 0.6), rgba(120, 53, 15, 0.8)',
+                mythic: 'rgba(153, 27, 27, 0.6), rgba(127, 29, 29, 0.8)',
+                secret: 'rgba(55, 212, 191, 0.6), rgba(0, 206, 165, 0.8)'
+            };
+            return colors[rarity] || colors.common;
+        }
+
+        // Format timestamp
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000); // seconds
+
+            if (diff < 60) return 'Just now';
+            if (diff < 3600) return `${Math.floor(diff / 60)}m ago`;
+            if (diff < 86400) return `${Math.floor(diff / 3600)}h ago`;
+            return date.toLocaleDateString();
+        }
+
+        // Show notification for new catch
+        function showNotification(fishName, rarity) {
+            // Update notification badge
+            const notificationBtn = document.querySelector('.icon-btn.notification');
+            if (notificationBtn) {
+                const badge = notificationBtn.querySelector('::after') || notificationBtn;
+                // Badge count is handled by CSS, but we can add animation
+                notificationBtn.style.animation = 'none';
+                setTimeout(() => {
+                    notificationBtn.style.animation = 'pulse 0.5s ease';
+                }, 10);
+            }
+
+            // Optional: Browser notification (requires permission)
+            if ('Notification' in window && Notification.permission === 'granted') {
+                new Notification('New Fish Caught! 🎣', {
+                    body: `${fishName} (${rarity})`,
+                    icon: '🐟'
+                });
+            }
+        }
+
+        // Request notification permission
+        function requestNotificationPermission() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission();
+            }
+        }
+
+        // Add pulse animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes pulse {
+                0%, 100% { transform: scale(1); }
+                50% { transform: scale(1.1); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize on load
+        loadData();
+        const checkSocket = setInterval(() => {
+            if (window.urlSocket) {
+                connectWebSocket();
+                clearInterval(checkSocket);
+            } else {
+                console.log("please enter socket");
+            }
+        }, 1000);
+        // requestNotificationPermission();
+        let ripiu = document.getElementsByClassName('review-btn')[0];
+        let itung = document.getElementsByClassName('review-count')[0];
+        ripiu.addEventListener('click', () => {
+            itung.textContent = Number(itung.textContent) + 1;
+        });
+
+
+        // Optional: Clear history button (can be added to UI)
+        window.clearFishHistory = function () {
+            if (confirm('Clear all fish catch history?')) {
+                catchHistory = [];
+                fishCaught = 0;
+                uniqueFishes = {};
+                saveData();
+                updateFishGrid();
+                updateLastCatch();
+            }
+        };
+    </script>
+</body>
+
+</html>
