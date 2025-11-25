@@ -283,7 +283,6 @@
                 const statusEl = document.getElementById('wsStatus');
                 statusEl.className = 'ws-status connected';
                 statusEl.innerHTML = '🟢 Connected';
-                console.log('WebSocket connected to', socketUrl);
             };
 
             ws.onclose = () => {
@@ -653,4 +652,5 @@ function updateLastCatch() {
 
 
 </html>
+
 
