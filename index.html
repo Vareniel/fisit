@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIKITIN - Gaming Dashboard</title>
+    <title>Fish It Notification</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.0/font/bootstrap-icons.min.css"
         rel="stylesheet">
@@ -238,17 +238,34 @@
         }, { passive: false });
 
         // Load data from localStorage
-        function loadData() {
-            const savedHistory = localStorage.getItem('fishCatchHistory');
-            const savedCount = localStorage.getItem('fishCaught') || 0;
-            const savedUnique = localStorage.getItem('uniqueFishes');
+        async function loadData() {
+            try {
+                const resp = await fetch(`${window.urlWebhook}/api/db`);
+                if (!resp.ok) throw new Error('Failed to fetch DB');
+                const db = await resp.json();
 
-            if (savedHistory || savedCount) {
-                catchHistory = JSON.parse(savedHistory);
-                fishCaught = savedCount;
-                uniqueFishes = savedUnique ? JSON.parse(savedUnique) : {};
+                // Map server DB to local variables used oleh UI
+                catchHistory = db.lastCatches.slice(0, MAX_DISPLAY) || [];
+                fishCaught = db.totalFishCaught || 0;
+                uniqueFishes = db.uniqueFishes || {};
+
                 updateFishGrid(true);
                 updateLastCatch();
+                saveData(); // optional: keep local copy in localStorage
+            } catch (err) {
+                console.warn("Could not load DB from server:", err);
+                // fallback: try loading from localStorage as before
+                const savedHistory = localStorage.getItem('fishCatchHistory');
+                const savedCount = localStorage.getItem('fishCaught') || 0;
+                const savedUnique = localStorage.getItem('uniqueFishes');
+
+                if (savedHistory) {
+                    catchHistory = JSON.parse(savedHistory);
+                    fishCaught = Number(savedCount);
+                    uniqueFishes = savedUnique ? JSON.parse(savedUnique) : {};
+                    updateFishGrid(true);
+                    updateLastCatch();
+                }
             }
         }
 
@@ -262,12 +279,11 @@
         // Connect WebSocket
         function connectWebSocket() {
             const ws = new WebSocket(`wss://${window.urlSocket}`);
-
             ws.onopen = () => {
                 const statusEl = document.getElementById('wsStatus');
                 statusEl.className = 'ws-status connected';
                 statusEl.innerHTML = '🟢 Connected';
-                console.log('WebSocket connected');
+                console.log('WebSocket connected to', socketUrl);
             };
 
             ws.onclose = () => {
@@ -285,7 +301,19 @@
             ws.onmessage = (event) => {
                 try {
                     const data = JSON.parse(event.data);
-                    processFishCatch(data);
+                    // Jika server broadcast DB update
+                    if (data?.type === 'db_update' && data.db) {
+                        const db = data.db;
+                        catchHistory = db.lastCatches.slice(0, MAX_DISPLAY) || [];
+                        fishCaught = db.totalFishCaught || 0;
+                        uniqueFishes = db.uniqueFishes || {};
+                        saveData();
+                        updateFishGrid();
+                        updateLastCatch();
+                    } else {
+                        // backward compatibility: if server sends raw webhook payload, try process it
+                        if (data?.embeds) processFishCatch(data);
+                    }
                 } catch (error) {
                     console.error('Error processing message:', error);
                 }
@@ -382,12 +410,12 @@
             // tambahkan class animasi
             fishCount.classList.add('pop');
 
-            if (catchHistory.length > 0) {
-                const playerName = document.querySelectorAll("strong")[0];
-                if (playerName.textContent !== catchHistory[0]?.player) {
-                    playerName.textContent = `@${catchHistory[0].player}`
-                }
-            }
+            // if (catchHistory.length > 0) {
+            //     const playerName = document.querySelectorAll("strong")[0];
+            //     if (playerName.textContent !== catchHistory[0]?.player) {
+            //         playerName.textContent = `@${catchHistory[0].player}`
+            //     }
+            // }
 
             // Convert to array and sort by count
             let fishArray = Object.entries(uniqueFishes).map(([name, data]) => ({
@@ -592,9 +620,9 @@ function updateLastCatch() {
         document.head.appendChild(style);
 
         // Initialize on load
-        loadData();
         const checkSocket = setInterval(() => {
-            if (window.urlSocket) {
+            if (window.urlSocket && window.urlWebhook) {
+                loadData();
                 connectWebSocket();
                 clearInterval(checkSocket);
             } else {
@@ -625,3 +653,4 @@ function updateLastCatch() {
 
 
 </html>
+
