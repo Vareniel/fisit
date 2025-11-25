@@ -240,7 +240,7 @@
         // Load data from localStorage
         async function loadData() {
             try {
-                const resp = await fetch(`${window.urlWebhook}/api/db`);
+                const resp = await fetch(`https://fishit.loca.lt/api/db`);
                 if (!resp.ok) throw new Error('Failed to fetch DB');
                 const db = await resp.json();
 
@@ -278,7 +278,7 @@
 
         // Connect WebSocket
         function connectWebSocket() {
-            const ws = new WebSocket(`wss://${window.urlSocket}`);
+            const ws = new WebSocket(`wss://fishitws.loca.lt`);
             ws.onopen = () => {
                 const statusEl = document.getElementById('wsStatus');
                 statusEl.className = 'ws-status connected';
@@ -619,15 +619,15 @@ function updateLastCatch() {
         document.head.appendChild(style);
 
         // Initialize on load
-        const checkSocket = setInterval(() => {
-            if (window.urlSocket && window.urlWebhook) {
-                loadData();
-                connectWebSocket();
-                clearInterval(checkSocket);
-            } else {
-                console.log("please enter socket");
-            }
-        }, 1000);
+        loadData();
+        connectWebSocket();
+        // const checkSocket = setInterval(() => {
+        //     if (window.urlSocket && window.urlWebhook) {
+        //         clearInterval(checkSocket);
+        //     } else {
+        //         console.log("please enter socket");
+        //     }
+        // }, 1000);
         // requestNotificationPermission();
         let ripiu = document.getElementsByClassName('review-btn')[0];
         let itung = document.getElementsByClassName('review-count')[0];
@@ -652,5 +652,6 @@ function updateLastCatch() {
 
 
 </html>
+
 
 
